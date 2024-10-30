@@ -1,59 +1,7 @@
+-- vim.api.nvim_command("set codelens")
 return {
   {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    build = ":Copilot auth",
-    opts = {
-      suggestion = {
-        accept = false,
-        enabled = true,
-      },
-      panel = { enabled = true },
-      filetypes = {
-        markdown = true,
-        help = true,
-      },
-    },
-  },
-  {
-    "nvim-cmp",
-    dependencies = {
-      {
-        "zbirenbaum/copilot-cmp",
-        dependencies = "copilot.lua",
-        opts = {},
-        config = function(_, opts)
-          local copilot_cmp = require("copilot_cmp")
-          copilot_cmp.setup(opts)
-          -- attach cmp source whenever copilot attaches
-          -- fixes lazy-loading issues with the copilot cmp source
-          LazyVim.lsp.on_attach(function(client)
-            copilot_cmp._on_insert_enter({})
-          end, "copilot")
-        end,
-      },
-    },
-    opts = function(_, opts)
-      table.insert(opts.sources, 1, {
-        name = "copilot",
-        group_index = 1,
-        priority = 100,
-      })
-    end,
-  },
-  {
-    "zbirenbaum/copilot-cmp",
-    dependencies = "copilot.lua",
-    opts = {},
-    config = function(_, opts)
-      local copilot_cmp = require("copilot_cmp")
-      copilot_cmp.setup(opts)
-      -- attach cmp source whenever copilot attaches
-      -- fixes lazy-loading issues with the copilot cmp source
-      LazyVim.lsp.on_attach(function(client)
-        copilot_cmp._on_insert_enter({})
-      end, "copilot")
-    end,
+    "github/copilot.vim",
   },
   {
     "nvim-lua/plenary.nvim",
@@ -64,7 +12,7 @@ return {
     cmd = "CopilotChat",
     opts = function()
       local user = vim.env.USER or "User"
-      user = user:sub(1, 1):upper() .. user:sub(2)
+      -- user = user:sub(1, 1):upper() .. user:sub(2)
       return {
         auto_insert_mode = true,
         show_help = true,
@@ -85,7 +33,7 @@ return {
       {
         "<leader>cc",
         function()
-          return require("CopilotChat").toggle()
+          vim.cmd("CopilotChat")
         end,
         desc = "Toggle (CopilotChat)",
         mode = { "n", "v" },
